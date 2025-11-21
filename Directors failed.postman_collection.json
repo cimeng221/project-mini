@@ -1,0 +1,185 @@
+{
+	"info": {
+		"_postman_id": "6154d2ea-0930-4ef8-b173-668d3a25f72c",
+		"name": "Directors failed",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48345942",
+		"_collection_link": "https://melandrifadillah7-3637200.postman.co/workspace/cimeng's-Workspace~30de8807-f669-4182-828f-367cad61d432/collection/48345942-6154d2ea-0930-4ef8-b173-668d3a25f72c?action=share&source=collection_link&creator=48345942"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status respons adalah 500 OK\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Header Content-Typ adalah application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Con-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body respons adalah sebuah array\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('birtYEAR');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"name\": \"Quentin Tarantino\",\r\n        \"birthYear\": 1963\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/directors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"directors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status respons adalah 201 Created\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Respons berisi ID film yang baru dibuat dan menyimpannya\", () => {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.be.a('number');\r",
+							"\r",
+							"    // Simpan ID ke variabel koleksi\r",
+							"    pm.collectionVariables.set(\"createdMovieId\", jsonData.id);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n        \"name\": \"Quentin Tarantino\",\r\n        \"birthYear\": 1963\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/directors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"directors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status respons adalah 200 OK\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n        \"name\": \"Bawoks\",\r\n        \"birthYear\": 1970\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/directors/{{createdMovieId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"directors",
+						"{{createdMovieId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status respons adalah 204 No Content\", () => {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n        \"name\": \"Bawoks\",\r\n        \"birthYear\": 1970\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3300/directors/{{createdMovieId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"directors",
+						"{{createdMovieId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
