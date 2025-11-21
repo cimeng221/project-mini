@@ -4,7 +4,7 @@ const cors = require('cors');
 const db = require('./db.js'); // Menggunakan modul pg baru
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { authenticateToken, authorizeRole } = require('./middleware/auth.js');
+const { authenticateToken, authorizeRole } = require('./middleware/Middleware.js');
 
 const app = express();
 const PORT = process.env.PORT || 3300;
