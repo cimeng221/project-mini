@@ -161,6 +161,79 @@ app.delete('/movies/:id', [authenticateToken, authorizeRole('admin')], async (re
 });
 
 // === DIRECTOR ROUTES (TUGAS PRAKTIKUM) ===
+app.get('/directors', async (req, res, next) => {
+    const sql = `
+        SELECT id, name, "birthYear"
+        FROM directors
+        ORDER BY id ASC
+    `;
+    try {
+        const result = await db.query(sql);
+        res.json(result.rows);
+    } catch (err) {
+        next(err);
+    }
+});
+
+app.get('/directors/:id', async (req, res, next) => {
+    const sql = `
+        SELECT id, name, "birthYear"
+        FROM directors
+        WHERE id = $1
+    `;
+    try {
+        const result = await db.query(sql, [req.params.id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Sutradara tidak ditemukan' });
+        }
+        res.json(result.rows[0]);
+    } catch (err) {
+        next(err);
+    }
+});
+
+app.post('/directors', authenticateToken, async (req, res, next) => {  
+    const { name, birthYear } = req.body;  
+    if (!name || !birthYear) {  
+        return res.status(400).json({ error: 'name dan birthYear wajib diisi' });  
+    }  
+    const sql = 'INSERT INTO directors (name, "birthYear") VALUES ($1, $2) RETURNING *';  
+    try {  
+        const result = await db.query(sql, [name, birthYear]);  
+        res.status(201).json(result.rows[0]);  
+    } catch (err) {  
+        next(err);  
+    }  
+});
+
+app.put('/directors/:id', [authenticateToken, authorizeRole('admin')], 
+async (req, res, next) => { 
+    const { name, birthYear } = req.body; 
+    const sql = 'UPDATE directors SET name = $1, "birthYear" = $2 WHERE id = $3 RETURNING *'; 
+    try { 
+        const result = await db.query(sql, [name, birthYear, req.params.id]); 
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Sutradara tidak ditemukan' });
+        }
+        res.json(result.rows[0]);
+    } catch (err) { 
+        next(err);
+    }
+});
+
+app.delete('/directors/:id', [authenticateToken, authorizeRole('admin')], async (req, res, next) => {
+    const sql = 'DELETE FROM directors WHERE id = $1 RETURNING *';
+    try {
+        const result = await db.query(sql, [req.params.id]);
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Sutradara tidak ditemukan' });
+        }
+        res.status(204).send();
+    } catch (err) {
+        next(err);
+    }
+});
+
 // (Mahasiswa harus me-refactor endpoint /directors dengan pola yang sama)
 
 // === FALLBACK & ERROR HANDLING ===
